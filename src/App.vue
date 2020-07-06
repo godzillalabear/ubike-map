@@ -30,9 +30,13 @@
 </template>
 
 <script>
+import taipeiDistrict from './assets/taipeiDistrict.json';
 
 export default {
   name: 'App',
+  data: () => ({
+    taipeiDistrict,
+  }),
 };
 </script>
 
