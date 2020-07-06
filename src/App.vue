@@ -47,11 +47,13 @@ export default {
       city: '臺北市',
       dist: '',
     },
+    ubikes: [],
   }),
   created() {
     const api = 'https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json';
     this.$http.get(api).then((response) => {
       console.log(response.data);
+      this.ubikes = Object.keys(response.data.retVal).map((key) => response.data.retVal[key]);
     });
   },
 };
