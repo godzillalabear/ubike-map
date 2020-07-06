@@ -58,13 +58,34 @@ export default {
   },
   watch: {
     youbikes() {
-      this.addMarkers();
+      this.updateMap();
     },
   },
   methods: {
-    addMarkers() {
+    updateMap() {
+      this.OSMap.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          this.OSMap.removeLayer(layer);
+        }
+      });
+
       this.youbikes.forEach((bike) => {
-        L.marker([bike.lat, bike.lng]).addTo(this.OSMap);
+        L.marker([bike.lat, bike.lng])
+          .bindPopup(
+            `<p>
+            <strong style="font-size: 20px;">${bike.sna}</strong>
+          </p>
+          <strong style="font-size: 16px; color: #d45345;">可租借車輛剩餘：${bike.sbi} 台</strong>
+          <br>可停空位剩餘: ${bike.bemp}<br>
+          <small>最後更新時間: ${bike.mday}</small>`,
+          )
+          .addTo(this.OSMap);
+      });
+      this.taipeiDist[0].districts.find((dist) => {
+        if (dist.name === this.select.dist) {
+          this.OSMap.flyTo(new L.LatLng(dist.latitude, dist.longitude), 14);
+        }
+        return dist.name === this.select.dist;
       });
     },
   },
