@@ -51,6 +51,23 @@ export default {
     ubikes: [],
     OSMap: {},
   }),
+  computed: {
+    youbikes() {
+      return this.ubikes.filter((bike) => bike.sarea === this.select.dist);
+    },
+  },
+  watch: {
+    youbikes() {
+      this.addMarkers();
+    },
+  },
+  methods: {
+    addMarkers() {
+      this.youbikes.forEach((bike) => {
+        L.marker([bike.lat, bike.lng]).addTo(this.OSMap);
+      });
+    },
+  },
   created() {
     const api = 'https://tcgbusfs.blob.core.windows.net/blobyoubike/YouBikeTP.json';
     this.$http.get(api).then((response) => {
@@ -65,7 +82,7 @@ export default {
     });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
+      maxZoom: 20,
     }).addTo(this.OSMap);
   },
 };
